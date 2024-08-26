@@ -18,7 +18,7 @@
   <div class="mt-12 p-12 rounded-md shadow-lg {isLoading ? 'visible' : 'hidden'} text-center text-3xl">
     Fetching data..
   </div>
-  <div class="py-4 px-12 h-[60vh] overflow-y-auto {isLoading ? 'hidden' : 'visible'}">
+  <div class="px-12 h-[60vh] overflow-y-auto {isLoading ? 'hidden' : 'visible'}">
     <table>
       <thead class="sticky top-1 bg-gray-700 text-blue-300">
         <tr>

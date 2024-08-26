@@ -19,7 +19,7 @@
   Fetching data..
 </div>
 <!-- {:else} -->
-<div class="py-4 px-12 h-[60vh] overflow-y-auto {isLoading ? 'hidden' : 'visible'}">
+<div class="px-12 h-[60vh] overflow-y-auto {isLoading ? 'hidden' : 'visible'}">
   <table>
     <thead class="sticky top-1 bg-gray-700 text-blue-300">
       <tr>
