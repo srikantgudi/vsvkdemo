@@ -19,9 +19,9 @@
   Fetching data..
 </div>
 <!-- {:else} -->
-<div class="px-12 h-[60vh] overflow-y-auto {isLoading ? 'hidden' : 'visible'}">
+<div class="px-12 h-[60vh] sticky top-0 overflow-y-auto {isLoading ? 'hidden' : 'visible'}">
   <table>
-    <thead class="sticky top-1 bg-gray-700 text-blue-300">
+    <thead class="sticky top-0 bg-gray-700 text-blue-300">
       <tr>
         <td>Title</td>
         <td>Description</td>
