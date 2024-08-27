@@ -3,17 +3,22 @@
   import * as clk from "./clock";
 	import { onMount } from "svelte";
 
+  export let showLocal = true;
   export let wid = 200;
   export let zone;
+  export let showHoursFormat = false;
+
   let localTime = moment();
   let hrs = 12;
+  let fillColor = 'aliceblue';
   $: hr24 = hrs == 24;
   let curdt = moment().tz(zone);
+  $: hr = curdt.hour();
   $: points = clk.getPoints(30, hrs);
   $: minPoints = clk.getPoints(45, 60);
   $: hrAng = (curdt.hour()*(360/hrs) + curdt.minute()/2)-90;
   $: miAng = (curdt.minute()*6 + curdt.second()/10)-90;
-  
+  $: fillColor = hr < 6 ? '#666' : hr < 12 ? 'skyblue' : hr < 18 ? 'seagreen' : 'navy';
   $: hrAngLocal = (localTime.hour()*(360/hrs) + localTime.minute()/2)-90;
   $: miAngLocal = (localTime.minute()*6 + localTime.second()/10)-90;
   
@@ -34,8 +39,10 @@
 <div class="w-full md:w-3/4">
   <div class="bg-gray-200 flex md:flex-row justify-center flex-col text-center p-1">
     <div>{#if zone}{curdt.format("ddd DD MMM HH:mm:ss z")}{/if}</div>
-    <div>Format: <label><input type="radio" bind:group={hrs} value={12}> 12 hrs</label>
-    <label><input type="radio" bind:group={hrs} value={24}> 24 hrs</label></div>
+    <div class="{showHoursFormat ? 'visible': 'hidden'}">
+      Format: <label><input type="radio" bind:group={hrs} value={12}> 12 hrs</label>
+      <label><input type="radio" bind:group={hrs} value={24}> 24 hrs</label>
+    </div>
   </div>
   <div>
     <svg viewBox="-50 -50 100 100">
@@ -60,12 +67,14 @@
       {#each minPoints as mp}
       <text x={mp.x} y={mp.y} font-size={mp.val%5?3:4} fill={mp.val%5?'gray':'aliceblue'} text-anchor="middle">{mp.val}</text>
       {/each}
-      <polyline class="hand" points="-4,0 2,-1 27,0 2,1 -4,0" fill="aliceblue" stroke="navy" stroke-width={0.3} transform={`rotate(${hrAng})`} />
-      <polyline class="hand" points="-4,0 2,-1 40,0 2,1 -4,0" fill="aliceblue" stroke="navy" stroke-width={0.3} transform={`rotate(${miAng})`} />
+      <polyline class="hand" points="-4,0 2,-1 27,0 2,1 -4,0" fill={fillColor} stroke="navy" stroke-width={0.3} transform={`rotate(${hrAng})`} />
+      <polyline class="hand" points="-4,0 2,-1 40,0 2,1 -4,0" fill={fillColor} stroke="navy" stroke-width={0.3} transform={`rotate(${miAng})`} />
 
+      {#if showLocal}
       <!-- local time -->
        <line x1={-6} x2={28} stroke="brown" stroke-linecap="round" transform={`rotate(${hrAngLocal})`} />
        <line x1={-6} x2={40} stroke="brown" stroke-linecap="round" transform={`rotate(${miAngLocal})`} />
+      {/if}
     </svg>
   </div>
 </div>
