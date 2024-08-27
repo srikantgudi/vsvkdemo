@@ -44,9 +44,9 @@
     const dates = getNumDays(curdt.month(), curdt.year());
     let points = [];
     const ang = 360 / dates.numdays;
-    for (let d=0; d < dates.numdays; d++) {
+    for (let d=1; d <= dates.numdays; d++) {
       let rad = ((d * ang - 90) * Math.PI) / 180;
-      points = [...points, {val:d+1, x: Math.cos(rad) * 32, y: Math.sin(rad) * 32}]
+      points = [...points, {val:d, x: Math.cos(rad) * 32, y: Math.sin(rad) * 32}]
     }
     return points;
   }
