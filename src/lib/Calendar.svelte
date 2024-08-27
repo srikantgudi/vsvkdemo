@@ -1,7 +1,6 @@
 <script>
   import {onMount} from 'svelte';
   import moment from "moment-timezone";
-  import * as cal from './cal';
   let curdt = moment();
   let yr = moment().year();
   let mo = moment().month();
@@ -18,16 +17,16 @@
 
   const weekDayNames = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat']
   const monthNames = ['January','February','March','April','May','June','July','Aug','Sep','Oct','Nov','Dec']
-  // const getRad = (n, ang) => ((n * ang - 90) * Math.PI) / 180
-  // const getAng = (n) => 360 / n
-  // const getNumDays = (m,y) => {
-  //   const startdt = moment([y,m,1]).startOf('month');
-  //   const enddt = moment([y,m,1]).endOf('month');
-  //   return {weekday: startdt.weekday(), numdays: enddt.date()}
-  // }
-  const calcDays = (dt) => {
+  const getRad = (n, ang) => ((n * ang - 90) * Math.PI) / 180
+  const getAng = (n) => 360 / n;
+  const getNumDays = (m,y) => {
+    const startdt = moment([y,m]).startOf('month');
+    const enddt = moment([y,m]).endOf('month');
+    return {weekday: startdt.weekday(), numdays: enddt.date()}
+  }
+  const calcDays = () => {
     let days = [];
-    const dates = cal.getNumDays(dt.month(),dt.year())
+    const dates = getNumDays(curdt.month(),curdt.year())
     for (let w=0; w < dates.weekday; w++) {
       days = [...days, '*']
     }
@@ -36,24 +35,28 @@
     }
     return days;
   }
-  const dayPoints = (dt) => {
-    // console.log('cur-day:', curdt.date());
-    const dates = cal.getNumDays(curdt.month(), curdt.year());
-    dayAng = 360 / dates.numdays;
+  const getWeekAng = (d) => d * getAng(7) - 90;
+  const getDayAng = (dt) => {
+    const ndays = getNumDays(dt.month(), dt.year()).numdays;
+    return (dt.date()-1) * getAng(ndays) - 90;
+  }
+  const dayPoints = () => {
+    const dates = getNumDays(curdt.month(), curdt.year());
     let points = [];
     const ang = 360 / dates.numdays;
-    for (let d=1; d <= dates.numdays; d++) {
+    console.log('dayPoints: dates:', dates, 'ang:',ang)
+    for (let d=0; d < dates.numdays; d++) {
       let rad = ((d * ang - 90) * Math.PI) / 180;
-      points = [...points, {val:d, x: Math.cos(rad) * 32, y: Math.sin(rad) * 32}]
+      points = [...points, {val:d+1, x: Math.cos(rad) * 32, y: Math.sin(rad) * 32}]
     }
     return points;
   }
   
   onMount(() => {
-    let ang = cal.getAng(12);
+    let ang = getAng(12);
     monthPoints = []
     for (let i=0; i < 12; i++) {
-      const rad = cal.getRad(i,ang);
+      const rad = getRad(i,ang);
       monthPoints = [...monthPoints, {
         id: i,
         val: monthNames[i].slice(0,3),
@@ -63,9 +66,9 @@
     }
     calcYears();
     weekPoints = [];
-    const weekAng = cal.getAng(7);
+    const weekAng = getAng(7);
     for (let i=0; i < 7; i++) {
-      const rad = cal.getRad(i,weekAng);
+      const rad = getRad(i,weekAng);
       weekPoints = [...weekPoints, {
         id: i,
         val: weekDayNames[i],
@@ -78,7 +81,6 @@
   const setYear = (y) => {
     yr = y;
     curdt = curdt.year(y);
-    // console.log('set year: curdt: ', curdt);
     calcDays();
   }
 
@@ -96,10 +98,9 @@
     yearPoints = []
     const angYr = 360 / maxRadialYears;
     for (let y=0; y < maxRadialYears; y++) {
-      const rad = cal.getRad(y, angYr);
+      const rad = getRad(y, angYr);
       yearPoints = [...yearPoints, {val:startYr+y, x: Math.cos(rad)*57, y: Math.sin(rad)*56}];
     }
-    // console.log('calc-years:', yearPoints);
   }
   const setStartYear = (delta) => {
     startYr += delta;
@@ -142,8 +143,8 @@
         {/each}
         <!-- <polyline points="48,0 46,-1 44,-1 44,0 44,1 46,1 48,0" fill="maroon" transform={`rotate(${curdt.month()*30-90})`} /> -->
         <polyline points="51,-1 47,0 51,1" fill="lightcyan" transform={`rotate(${curdt.month()*30-90})`} />
-        <polyline points="16,0 12,-1 12,1 16,0" fill="maroon" transform={`rotate(${cal.getWeekAng(curdt.weekday())})`} />
-        <polyline points="29,0 25,-1 25,1 29,0" fill="lightblue" transform={`rotate(${cal.getDayAng(curdt)})`} />
+        <polyline points="16,0 12,-1 12,1 16,0" fill="maroon" transform={`rotate(${getWeekAng(curdt.weekday())})`} />
+        <polyline points="29,0 25,-1 25,1 29,0" fill="lightblue" transform={`rotate(${getDayAng(curdt)})`} />
       </svg>
     </div>
   </div>
@@ -163,7 +164,7 @@
         {/each}
       </div>
       <div class="grid grid-cols-7 text-center gap-1 bg-gray-100">
-        {#each cal.calcDays(mo,yr) as d}
+        {#each calcDays(mo,yr) as d}
         <button on:click={() => setDate(d)} class="cursor-pointer rounded-md p-4 py-8 shadow-md text-{d==curdt.date()?'2xl':'md'} text-blue-{d==curdt.date()?400:600} shadow-gray-300">{d}</button>
         {/each}
       </div>
