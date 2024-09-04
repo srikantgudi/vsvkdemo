@@ -1,6 +1,3 @@
-<svelte:head>
-	<title>Calendar</title>
-</svelte:head>
 <script>
 	import Calendar from "$lib/Calendar.svelte";
 	import moment from "moment-timezone";

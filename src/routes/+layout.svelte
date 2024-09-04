@@ -3,14 +3,7 @@
 </svelte:head>
 <script>
   import "../app.css";
-  let canShowHelp = false;
 
-  const toggleShowHelp = () => {
-    canShowHelp = !canShowHelp;
-    setTimeout(() => {
-      canShowHelp = false;
-    }, 2000);
-  }
 </script>
 
 <main class="md:w-5/6 mx-auto">
