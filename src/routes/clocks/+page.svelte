@@ -35,7 +35,7 @@
 <div>
   <div class="col-span-10">
     <div class ="my-2 flex items-center gap-2">
-      <div class="text-3xl">Clocks :: {zone1}</div>
+      <div class="text-3xl">Clocks</div>
       <!-- <div> | </div>
       <div class="ml-4">Custom time: <input class="p-1 rounded-md border border-gray-600" type="datetime-local" on:change={setCustomTime} /></div> -->
     </div>
