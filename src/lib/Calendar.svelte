@@ -107,66 +107,26 @@
   }
 </script>
 
-<div class="grid md:grid-cols-2 gap-4">
-  <div class="md:w-3/4 md:px-2">
-    <div class="text-2xl font-serif">Radial Calendar</div>
-    <div class="rounded-lg shadow-md shadow-blue-400 border-t-2 w-full">
-      <svg viewBox="-65 -65 130 130">
-        <circle r={62} fill="darkslategrey" stroke="#009" />
-        <circle r={52} fill="darkslate" stroke="olive" />
-        <circle r={40} fill="#333" stroke="teal"  />
-        <circle r={24} fill="cornflowerblue" stroke="navy" stroke-width={0.3} />
-        <g  class="cursor-pointer" on:click={() => setStartYear(-maxRadialYears)}>
-          <rect x={-45} y={-60} rx={2} ry={2} width={12} height={6} fill="black" stroke-width="0.4" stroke="blue" />
-          <text x={-43} y={-56} fill="white" font-size={3}>&lt;-{maxRadialYears}</text>
-        </g>
-        
-        <g class="cursor-pointer" on:click={() => setStartYear(maxRadialYears)}>
-          <rect x={34} y={-60} rx={2} ry={2} width={12} height={6} fill="#000" stroke-width="0.4" stroke="blue" />
-          <text x={36} y={-56} fill="white" font-size={3}>&gt;+{maxRadialYears}</text>
-        </g>
-        {#each yearPoints as yp}
-        <g on:click={() => setYear(yp.val)}>
-          <rect x={yp.x-5} y={yp.y-4} rx={2} width={10} height={6} fill="#333" stroke-width="0.4" stroke="gray" />
-          <text  class="cursor-pointer" x={yp.x} y={yp.y} text-anchor="middle" fill={curdt.year()==yp.val ? 'white':'beige'} font-weight={curdt.year()==yp.val ? 600 : 400} font-size={2.5}>{yp.val}</text>
-        </g>
-        {/each}
-        {#each monthPoints as p}
-        <text class="cursor-pointer" on:click={() => setMonth(p.id)} x={p.x} y={p.y} text-anchor="middle" font-weight={curdt.month()==p.id?600:100} fill="beige" font-size={4}>{p.val}</text>
-        {/each}
-        {#each weekPoints as p}
-        <text x={p.x} y={p.y} text-anchor="middle" font-weight={curdt.weekday()==p.id?600:200} fill={curdt.weekday()==p.id ? 'blue' : 'navy'} font-size={4}>{p.val}</text>
-        {/each}
-        {#each dayPoints() as d}
-        <text class="cursor-pointer" on:click={() => setDate(d.val)} x={d.x} y={d.y} text-anchor="middle" fill={d.val===curdt.date()?'#eee':'#aaa'} font-weight={d.val===curdt.date() ? 600 :200} font-size={d.val===curdt.date() ?5:4}>{d.val}</text>
-        {/each}
-        <!-- <polyline points="48,0 46,-1 44,-1 44,0 44,1 46,1 48,0" fill="maroon" transform={`rotate(${curdt.month()*30-90})`} /> -->
-        <polyline points="51,-1 47,0 51,1" fill="lightcyan" transform={`rotate(${curdt.month()*30-90})`} />
-        <polyline points="16,0 12,-1 12,1 16,0" fill="maroon" transform={`rotate(${getWeekAng(curdt.weekday())})`} />
-        <polyline points="29,0 25,-1 25,1 29,0" fill="lightblue" transform={`rotate(${getDayAng(curdt)})`} />
-      </svg>
-    </div>
+<div>
+  <div class="text-blue-500 md:text-3xl text-2xl mb-2">
+    {curdt.format("MMMM YYYY")}
   </div>
   <div>
-    <div class="text-blue-500 md:text-3xl text-2xl mb-2">
-      {curdt.format("MMMM YYYY")}
+    <div class="mb-2 grid grid-cols-12 text-center gap-1">
+      {#each monthNames as md, mdi}
+      <button on:click={() => setMonth(mdi)} 
+        class="p-2 rounded-t-md text-gray-{curdt.month()=== mdi ? 600 : 300}">{md.slice(0,3)}</button>
+      {/each}
     </div>
-    <div class="shadow-lg shadow-blue-500 rounded-lg">
-      <div class="mb-1 grid grid-cols-12 text-center gap-1">
-        {#each monthNames as md, mdi}
-        <button on:click={() => setMonth(mdi)} class="shadow-md shadow-amber-{curdt.month() == mdi? 400 :600} bg-gray-{curdt.month() == mdi ? 700 : 200} text-{curdt.month() == mdi ? 'blue':'black'}-500 hover:bg-gray-200 hover:text-black">{md.slice(0,3)}</button>
-        {/each}
-      </div>
-      <div class="grid grid-cols-7 text-center gap-1 bg-gray-100">
-        {#each weekDayNames as wd}
-        <div class="bg-blue-800 text-gray-200">{wd}</div>
-        {/each}
-      </div>
-      <div class="grid grid-cols-7 text-center gap-1 bg-gray-100">
-        {#each calcDays(mo,yr) as d}
-        <button on:click={() => setDate(d)} class="cursor-pointer rounded-md p-4 py-8 shadow-md text-{d==curdt.date()?'2xl':'md'} text-blue-{d==curdt.date()?400:600} shadow-gray-300">{d}</button>
-        {/each}
-      </div>
+    <div class="grid grid-cols-7 text-center gap-1 bg-gray-100">
+      {#each weekDayNames as wd}
+      <div class="bg-blue-800 text-gray-200 p-2">{wd}</div>
+      {/each}
+    </div>
+    <div class="grid grid-cols-7 text-center gap-1 bg-gray-400 p-2">
+      {#each calcDays(mo,yr) as d}
+      <button on:click={() => setDate(d)} class={`cursor-pointer text-${d==curdt.date() ? '3xl' : 'lg'} text-blue-${d==curdt.date() ? 500 : 400} bg-blue-${d==curdt.date() ? '500' : '400'} rounded-t-xl p-8 bg-gray-200 shadow-md shadow-b shadow-blue-600`}>{d}</button>
+      {/each}
     </div>
   </div>
 </div>

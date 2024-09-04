@@ -7,7 +7,6 @@
 	import { onMount } from "svelte";
 	let yr = moment().year();
   let mo = moment().month();
-
 </script>
-<div class="text-2xl font-bold">Calendars</div>
+
 <Calendar />
