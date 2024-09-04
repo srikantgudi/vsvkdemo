@@ -108,12 +108,9 @@
 </script>
 
 <div>
-<<<<<<< Updated upstream
   <div class="text-blue-500 md:text-3xl text-2xl mb-2">
     {curdt.format("MMMM YYYY")}
   </div>
-=======
->>>>>>> Stashed changes
   <div>
     <div class="mb-2 grid grid-cols-12 text-center gap-1">
       {#each monthNames as md, mdi}
