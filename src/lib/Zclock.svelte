@@ -6,7 +6,7 @@
   export let showLocal = true;
   export let wid = 200;
   export let zone;
-  export let showHoursFormat = false;
+  export let showHoursFormat = true;
 
   let localTime = moment();
   let hrs = 12;
@@ -36,16 +36,16 @@
 	}
 </style>
 
-<div class="w-full md:w-3/4">
-  <div class="bg-gray-200 flex md:flex-row justify-center flex-col text-center p-1">
+<div class="">
+  <div class="bg-gray-200 flex md:flex-row flex-col text-center p-1">
     <div>{#if zone}{curdt.format("ddd DD MMM HH:mm:ss z")}{/if}</div>
-    <div class="{showHoursFormat ? 'visible': 'hidden'}">
+    <div class="{showHoursFormat ? 'visible': 'hidden'} ml-4">
       Format: <label><input type="radio" bind:group={hrs} value={12}> 12 hrs</label>
       <label><input type="radio" bind:group={hrs} value={24}> 24 hrs</label>
     </div>
   </div>
   <div>
-    <svg viewBox="-50 -50 100 100">
+    <svg viewBox="-50 -50 100 100" width={wid} >
       <defs>
 				<radialGradient id="face">
 					<stop offset="10%" stop-color="lightcyan" />

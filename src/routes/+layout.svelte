@@ -1,3 +1,6 @@
+<svelte:head>
+  <title>SvelteKit Demo App</title>
+</svelte:head>
 <script>
   import "../app.css";
   let canShowHelp = false;

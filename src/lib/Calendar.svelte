@@ -38,7 +38,7 @@
   const getWeekAng = (d) => d * getAng(7) - 90;
   const getDayAng = (dt) => {
     const ndays = getNumDays(dt.month(), dt.year()).numdays;
-    return (dt.date()-1) * getAng(ndays) - 90;
+    return (dt.date()) * getAng(ndays) - 90;
   }
   const dayPoints = () => {
     const dates = getNumDays(curdt.month(), curdt.year());
